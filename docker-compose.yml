@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:    
+    php-apache:
+        container_name: apache
+        build: ./apacheBuild
+        ports:
+            - "8080:80"
+            - "443:443"
+        volumes:
+            - C:\Users\Marcos Lima\Documents\docker_php_post\apachewww:/var/www/html
+        links:
+            - postgres
+
+    postgres:
+        image: postgres:14.3-alpine
+        container_name: postgres
+        restart: always
+        ports:
+            - '5432:5432'
+        environment:
+            - POSTGRES_USER=eu
+            - POSTGRES_PASSWORD=eu
+        volumes:
+            - C:\Users\Marcos Lima\Documents\docker_php_post:/docker-entrypoint-initdb.d/init.sql
+
+        # networks:
+        #     - aplicacaoPhp
+    
+    pgadmin:
+        image: dpage/pgadmin4
+        container_name: pgadmin
+        ports:
+            - 8282:80
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=eu@gmail.com
+            - PGADMIN_DEFAULT_PASSWORD=eu
+        links:
+            - postgres
+
+
